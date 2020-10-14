@@ -1,0 +1,26 @@
+{
+  "name": "mini_rpg_bot",
+  "version": "1.0.0",
+  "description": "A mini rpg game on Discord",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Bot",
+    "RPG",
+    "Discord"
+  ],
+  "author": "jackred <jackred@tuta.io>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "discord.js": "^12.3.1",
+    "gaussian": "^1.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.11.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2"
+  }
+}

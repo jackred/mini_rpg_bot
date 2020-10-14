@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  discord_bot:
+    container_name: mini_rpg_bot
+    build: .
+    volumes:
+      - ./config.json:/usr/src/mini_rpg_bot/config.json
+    restart: always
+
+networks:
+  default:
+    external:
+      name: ng_network

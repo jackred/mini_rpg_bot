@@ -1,0 +1,27 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2019
+  },
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "rules": {
+    "semi": ["error", "always"],
+    "quotes": [
+      "error",
+      "single",
+      { "avoidEscape": true, "allowTemplateLiterals": true }
+    ],
+    "prettier/prettier": [
+      2,
+      {
+        "printWidth": 80,
+        "singleQuote": true,
+        "trailingComma": "es5"
+      }
+    ]
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  }
+}
