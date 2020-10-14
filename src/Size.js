@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = { M: { ac: 0 }, P: { ac: 2 }, L: { ac: -2 } };
+module.exports = { M: { mod: 0 }, P: { mod: 2 }, L: { mod: -2 } };

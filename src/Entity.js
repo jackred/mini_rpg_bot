@@ -1,27 +1,37 @@
 'use strict';
 
-const Stats = require('./Stats');
+const { Stats, DefaultStats } = require('./Stats');
 const Size = require('./Size');
 
 class Entity {
-  constructor(level, size) {
+  constructor(
+    level,
+    size,
+    {
+      dv = 10,
+      acBase = 10,
+      bba = 0,
+      stats = Object.assign({}, DefaultStats),
+    } = {}
+  ) {
     this.level = level;
-    this.size = size;
-    this.setStatBase();
+    this.size = Size[size];
+    this.setStatBase(stats);
     this.setEquipement();
-    this.setAttributs();
+    this.setAttributs(dv, acBase, bba);
     this.computeAttributs();
   }
 
-  setAttributs() {
+  setAttributs(dv, acBase, bba) {
     this.attr = {};
-    this.attr.dv = 10;
+    this.attr.dv = dv;
+    this.attr.ac = {};
+    this.attr.ac.base = acBase;
+    this.attr.bba = bba;
   }
 
   computeAttributs() {
     this.attr.pv = (this.attr.dv + this.stats.con.mod) * this.level;
-    this.attr.ac = {};
-    this.attr.ac.base = 10;
     this.attr.ac.armor = 0;
     for (let equip in this.equipements) {
       this.attr.ac.armor += equip.def;
@@ -30,17 +40,21 @@ class Entity {
       this.attr.ac.armor +
       this.attr.ac.base +
       this.stats.dex.mod +
-      Size[this.size].ac;
+      this.size.mod;
+    this.attr.bbc = this.attr.bba + this.stats.str.mod + this.size.mod;
   }
 
   setEquipement() {
     this.equipements = {};
   }
 
-  setStatBase() {
+  setStatBase(stats) {
     this.stats = {};
-    for (let stat of Stats) {
-      this.stats[stat] = { value: 10, mod: 0 };
+    for (let stat in stats) {
+      this.stats[stat] = {
+        value: stats[stat],
+        mod: Entity.getModifier(stats[stat]),
+      };
     }
   }
 
