@@ -3,8 +3,8 @@
 const Entity = require('../Entity');
 
 class Monster extends Entity {
-  constructor(level, size, grade, location) {
-    super(level, size);
+  constructor(level, size, grade, location, { dv, acBase, bba, stats } = {}) {
+    super(level, size, { dv, acBase, bba, stats });
     this.grade = grade;
     this.location = location;
   }

@@ -1,30 +1,28 @@
 'use strict';
 
-const Stats = require('../Stats');
+const { Stats } = require('../Stats');
 const Monster = require('./Monster');
 
 const gaussian = require('gaussian');
 
 class Goblin extends Monster {
   constructor(level) {
+    const stats = Goblin.computeBaseStat();
     // level, size, grade, location
-    super(level, 'P', 1, 'Dungeon');
+    super(level, 'P', 1, 'Dungeon', { stats, dv: 8, bba: 1 });
   }
 
-  setStatBase() {
+  static computeBaseStat() {
     const distrib = gaussian(10, 3);
-    this.stats = {};
+    let stats = {};
     for (let stat of Stats) {
       const randStat = distrib.ppf(Math.random());
-      this.stats[stat] = { value: Math.round(randStat) };
+      stats[stat] = Math.round(randStat);
     }
-    this.stats.dex.value += 2;
-    this.stats.wis.value -= 1;
-    this.stats.cha.value -= 3;
-    for (let stat of Stats) {
-      const randStat = distrib.ppf(Math.random());
-      this.stats[stat].mod = Goblin.getModifier(randStat);
-    }
+    stats.dex += 2;
+    stats.wis -= 1;
+    stats.cha -= 3;
+    return stats;
   }
 }
 
