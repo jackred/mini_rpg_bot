@@ -11,12 +11,13 @@ class Entity {
       dv = 10,
       acBase = 10,
       bba = 0,
+      statsModRace = {},
       stats = Object.assign({}, DefaultStats),
     } = {}
   ) {
     this.level = level;
     this.size = Size[size];
-    this.setStatBase(stats);
+    this.setStatBase(stats, statsModRace);
     this.setEquipement();
     this.setAttributs(dv, acBase, bba);
     this.computeAttributs();
@@ -48,12 +49,13 @@ class Entity {
     this.equipements = {};
   }
 
-  setStatBase(stats) {
+  setStatBase(stats, statsModRace) {
     this.stats = {};
     for (let stat in stats) {
+      const tmp = stats[stat] + (statsModRace[stat] || 0);
       this.stats[stat] = {
-        value: stats[stat],
-        mod: Entity.getModifier(stats[stat]),
+        value: tmp,
+        mod: Entity.getModifier(tmp),
       };
     }
   }

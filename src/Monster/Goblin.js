@@ -7,19 +7,24 @@ const gaussian = require('gaussian');
 
 class Goblin extends Monster {
   constructor(level) {
-    const stats = Goblin.computeBaseStat();
+    const statsModRace = Goblin.computeBaseStat(level);
     // level, size, grade, location
-    super(level, 'P', 1, 'Dungeon', { stats, dv: 8, bba: 1 });
+    super(level, 'P', 1, 'Dungeon', {
+      dv: 8,
+      bba: 1,
+      acBase: 8,
+      statsModRace,
+    });
   }
 
-  static computeBaseStat() {
-    const distrib = gaussian(10, 3);
+  static computeBaseStat(level) {
+    const distrib = gaussian(level / 4, 2 + level / 4);
     let stats = {};
     for (let stat of Stats) {
       const randStat = distrib.ppf(Math.random());
       stats[stat] = Math.round(randStat);
     }
-    stats.dex += 2;
+    stats.dex += 3;
     stats.wis -= 1;
     stats.cha -= 3;
     return stats;
