@@ -1,44 +1,32 @@
 'use strict';
 
-const { Stats, DefaultStats } = require('./Stats');
+const { getDefaultStats } = require('./Stats');
 const Size = require('./Size');
 
 class Entity {
-  constructor(
-    level,
-    size,
-    {
-      dv = 10,
-      acBase = 10,
-      bba = 0,
-      statsModRace = {},
-      stats = Object.assign({}, DefaultStats),
-    } = {}
-  ) {
+  constructor(level, size, name, stats = getDefaultStats()) {
+    this.race = this.constructor.name;
+    this.name = name;
     this.level = level;
-    this.size = Size[size];
-    this.setStatBase(stats, statsModRace);
+    this.size = { size, ...Size[size] };
+    this.setStatBase(stats);
     this.setEquipement();
-    this.setAttributs(dv, acBase, bba);
+    this.setAttributs();
     this.computeAttributs();
   }
 
-  setAttributs(dv, acBase, bba) {
+  setAttributs() {
     this.attr = {};
-    this.attr.dv = dv;
+    this.attr.dv = this.constructor.getDV(this.level);
     this.attr.ac = {};
-    this.attr.ac.base = acBase;
-    this.attr.bba = bba;
+    this.attr.ac.base = this.constructor.getAcBase();
   }
 
   computeAttributs() {
-    this.attr.pv = (this.attr.dv + this.stats.con.mod) * this.level;
-    this.attr.ac.armor = 0;
-    for (let equip in this.equipements) {
-      this.attr.ac.armor += equip.def;
-    }
+    this.attr.bba = this.constructor.getBBA(this.level);
+    this.attr.hp = (this.attr.dv + this.stats.con.mod) * this.level;
     this.attr.ac.total =
-      this.attr.ac.armor +
+      this.equipements.def +
       this.attr.ac.base +
       this.stats.dex.mod +
       this.size.mod;
@@ -47,21 +35,47 @@ class Entity {
 
   setEquipement() {
     this.equipements = {};
+    this.equipements.atk = 0;
+    this.equipements.def = 0;
   }
 
-  setStatBase(stats, statsModRace) {
+  setStatBase(stats) {
     this.stats = {};
     for (let stat in stats) {
-      const tmp = stats[stat] + (statsModRace[stat] || 0);
       this.stats[stat] = {
-        value: tmp,
-        mod: Entity.getModifier(tmp),
+        value: stats[stat],
+        mod: Entity.getModifier(stats[stat]),
       };
     }
   }
 
+  isHit(atk) {
+    return atk >= this.attr.ac.total;
+  }
+
+  loseHP(toLose) {
+    this.attr.hp -= toLose;
+    return `${this.name} lost ${toLose} HP`;
+  }
+
   static getModifier(stat) {
     return Math.floor((stat - 10) / 2);
+  }
+
+  static getBBA(level) {
+    return level;
+  }
+
+  static getDV() {
+    return 10;
+  }
+
+  static getAcBase() {
+    return 10;
+  }
+
+  static getStatsModRace() {
+    return {};
   }
 }
 

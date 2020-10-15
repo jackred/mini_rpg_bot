@@ -1,11 +1,27 @@
 'use strict';
 
 const Class = require('./Class');
+const Utility = require('../Utility');
 
 class Fighter extends Class {
-  constructor(level, race, stats) {
-    const bba = Fighter.getBBA(level);
-    super(level, race, { dv: 10, bba: bba, stats });
+  constructor(level, race, name, stats, modRace) {
+    super(level, race, name, stats, modRace);
+  }
+
+  baseAttack(target) {
+    const roll = Utility.roll(20);
+    const toHit = this.attr.bbc + roll;
+    let msg = `${this.name} rolled ${roll}: ${toHit} to hit.`;
+    if (target.isHit(toHit)) {
+      msg += '\n That hit!';
+      const damage = Utility.roll(6);
+      const totalDamage = damage + this.equipements.atk;
+      msg += '\nDamage rolled: ' + damage + '. Total damage: ' + totalDamage;
+      msg += '\n' + target.loseHP(totalDamage);
+    } else {
+      msg += 'Miss!';
+    }
+    return msg;
   }
 }
 
