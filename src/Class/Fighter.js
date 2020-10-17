@@ -10,7 +10,7 @@ class Fighter extends Class {
 
   baseAttack(target) {
     const roll = Utility.roll(20);
-    const toHit = this.attr.bbc + roll;
+    const toHit = this.attr.cac + roll;
     let msg = `${this.name} rolled ${roll}: ${toHit} to hit.`;
     if (target.isHit(toHit)) {
       msg += '\n That hit!';
@@ -22,6 +22,10 @@ class Fighter extends Class {
       msg += 'Miss!';
     }
     return msg;
+  }
+
+  static getDiscordColor() {
+    return '#d7ed12';
   }
 }
 

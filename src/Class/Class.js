@@ -11,7 +11,7 @@ class Class extends Entity {
 
   loseHP(toLose) {
     let msg = super.loseHP(toLose);
-    if (this.attr.hp <= 0) {
+    if (this.attr.hp.actual <= 0) {
       msg += '\n' + this.name + ' is unconscious!';
     }
     return msg;

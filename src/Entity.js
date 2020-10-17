@@ -24,13 +24,20 @@ class Entity {
 
   computeAttributs() {
     this.attr.bba = this.constructor.getBBA(this.level);
-    this.attr.hp = (this.attr.dv + this.stats.con.mod) * this.level;
+    const tmp = this.attr.dv + this.stats.con.mod;
+    this.attr.hp = {
+      max: tmp * this.level,
+      actual:
+        this.attr.hp !== undefined ? this.hp.actual + tmp : tmp * this.level,
+    };
     this.attr.ac.total =
       this.equipements.def +
       this.attr.ac.base +
       this.stats.dex.mod +
       this.size.mod;
-    this.attr.bbc = this.attr.bba + this.stats.str.mod + this.size.mod;
+    this.attr.cac = this.attr.bba + this.stats.str.mod + this.size.mod;
+    this.attr.dist = this.attr.bba + this.stats.dex.mod + this.size.mod;
+    this.attr.init = this.stats.dex.mod;
   }
 
   setEquipement() {
@@ -54,7 +61,7 @@ class Entity {
   }
 
   loseHP(toLose) {
-    this.attr.hp -= toLose;
+    this.attr.hp.actual -= toLose;
     return `${this.name} lost ${toLose} HP`;
   }
 
@@ -76,6 +83,10 @@ class Entity {
 
   static getStatsModRace() {
     return {};
+  }
+
+  static getDiscordColor() {
+    return '#FFFFFF';
   }
 }
 

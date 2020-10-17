@@ -11,7 +11,7 @@ class Monster extends Entity {
 
   loseHP(toLose) {
     let msg = super.loseHP(toLose);
-    if (this.attr.hp <= 0) {
+    if (this.attr.hp.actual <= 0) {
       msg += '\n' + this.name + ' is dead!';
     }
     return msg;
@@ -23,6 +23,10 @@ class Monster extends Entity {
 
   static getLocation() {
     return ['Dungeon'];
+  }
+
+  static getDiscordColor() {
+    return '#FF0000';
   }
 }
 
