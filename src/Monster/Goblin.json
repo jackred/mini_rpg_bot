@@ -1,0 +1,18 @@
+{
+  "name": "Goblin",
+  "size": "P",
+  "stats": {
+    "str": { "mean": "11 + level / 4", "variance": "2 + level / 4" },
+    "dex": { "mean": "15 + level / 4", "variance": "3 + level / 4" },
+    "con": { "mean": "12 + level / 4", "variance": "2 + level / 4" },
+    "cha": { "mean": "7 + level / 4", "variance": "1 + level / 4" },
+    "wis": { "mean": "9 + level / 4", "variance": "2 + level / 4" },
+    "int": { "mean": "10 + level / 4", "variance": "2 + level / 4" }
+  },
+  "dv": 8,
+  "acBade": 8,
+  "bba": "1 + Math.round(level / 3)",
+  "grade": 1,
+  "location": ["Dungeon"],
+  "color": "FF0000"
+}
