@@ -1,0 +1,5 @@
+{
+  "name": "Elf",
+  "size": "M",
+  "stat": {"dex": 2, "cha": 2, "con": -2}
+}
