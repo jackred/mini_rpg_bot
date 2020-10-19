@@ -1,5 +1,5 @@
 {
-  "name": "Goblin",
+  "race": "Goblin",
   "size": "P",
   "stats": {
     "str": { "mean": "11 + level / 4", "variance": "2 + level / 4" },
@@ -10,7 +10,7 @@
     "int": { "mean": "10 + level / 4", "variance": "2 + level / 4" }
   },
   "dv": 8,
-  "acBade": 8,
+  "acBase": 8,
   "bba": "1 + Math.round(level / 3)",
   "grade": 1,
   "location": ["Dungeon"],
