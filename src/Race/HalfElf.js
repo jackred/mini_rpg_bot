@@ -10,6 +10,10 @@ class HalfElf extends Race {
   static getSize() {
     return 'M';
   }
+
+  static getName() {
+    return 'Half-Elf';
+  }
 }
 
 module.exports = HalfElf;

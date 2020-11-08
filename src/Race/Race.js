@@ -4,9 +4,7 @@ class Race {
   static getStat() {
     return {};
   }
-  static getSize() {
-    return 'M';
-  }
+  static getSize() {}
 }
 
 module.exports = Race;

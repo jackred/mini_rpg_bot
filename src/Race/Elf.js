@@ -10,6 +10,10 @@ class Elf extends Race {
   static getSize() {
     return 'M';
   }
+
+  static getName() {
+    return 'Elf';
+  }
 }
 
 module.exports = Elf;
