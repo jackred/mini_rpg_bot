@@ -1,12 +1,33 @@
 'use strict';
 
 const Entity = require('../Entity');
+const { getDefaultStats } = require('../Stats');
 
 class Class extends Entity {
-  constructor(level, race, name, stats, modRace) {
+  constructor(
+    classPath,
+    level,
+    name,
+    race,
+    { equipements = {}, stats = {}, modRace = {} } = {}
+  ) {
     const size = race.getSize();
+    const raceName = race.getName();
+    const class_ = Entity.readJsonFile(classPath, 'src/Class/');
+    // TODO change class to smth else
     stats = Class.addStatRace(stats, race.getStat(modRace));
-    super(level, size, name, stats);
+    console.log(stats);
+    super(
+      level,
+      raceName,
+      size,
+      name,
+      class_.dv,
+      class_.acBase,
+      class_.bba,
+      class_.color,
+      { equipements, stats }
+    );
   }
 
   loseHP(toLose) {
@@ -22,7 +43,11 @@ class Class extends Entity {
   }
 
   static addStatRace(stats, raceStat) {
+    let defaultStats = getDefaultStats();
     for (let i in raceStat) {
+      if (!(i in stats)) {
+        stats[i] = defaultStats[i];
+      }
       stats[i] += raceStat[i];
     }
     return stats;

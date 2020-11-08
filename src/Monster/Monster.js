@@ -1,10 +1,11 @@
 'use strict';
 
 const Entity = require('../Entity');
+const { isEmpty } = require('../Utility');
 const gaussian = require('gaussian');
 
 class Monster extends Entity {
-  constructor(monsterPath, level, name, { stats, equipements } = {}) {
+  constructor(monsterPath, level, name, { equipements = {}, stats = {} } = {}) {
     const monster = Entity.readJsonFile(monsterPath, 'src/Monster/');
     stats = Monster.computeStat(monster.stats, stats, level);
     super(
@@ -31,7 +32,7 @@ class Monster extends Entity {
   }
 
   static computeStat(monsterStats, stats, level) {
-    if (stats === undefined) {
+    if (isEmpty(stats)) {
       stats = {};
       const tmp = (expr) =>
         Entity.getFunctionFromExpression('level', expr)(level);

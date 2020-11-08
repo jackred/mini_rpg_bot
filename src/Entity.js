@@ -97,7 +97,11 @@ class Entity {
 
   setStatBase(stats) {
     this.stats = {};
-    for (let stat in stats) {
+    let defaultStats = getDefaultStats();
+    for (let stat in defaultStats) {
+      if (!(stat in stats)) {
+        stats[stat] = defaultStats[stat];
+      }
       this.stats[stat] = {
         value: stats[stat],
         mod: Entity.getModifier(stats[stat]),

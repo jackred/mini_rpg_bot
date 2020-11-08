@@ -1,0 +1,7 @@
+{
+  "class": "Fighter",
+  "dv": 8,
+  "acBase": 10,
+  "bba": "1 + level",
+  "color": "d7ed12"
+}

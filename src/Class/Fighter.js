@@ -2,10 +2,26 @@
 
 const Class = require('./Class');
 const Utility = require('../Utility');
+const path = require('path');
 
 class Fighter extends Class {
-  constructor(level, race, name, stats, modRace) {
-    super(level, race, name, stats, modRace);
+  constructor(
+    level,
+    name,
+    race,
+    { equipements = {}, stats = {}, modRace = {} } = {}
+  ) {
+    super(
+      path.resolve(__dirname, './Fighter.json'),
+      level,
+      name,
+      race,
+      modRace,
+      {
+        equipements,
+        stats,
+      }
+    );
   }
 
   baseAttack(target) {
@@ -22,10 +38,6 @@ class Fighter extends Class {
       msg += 'Miss!';
     }
     return msg;
-  }
-
-  static getDiscordColor() {
-    return '#d7ed12';
   }
 }
 
