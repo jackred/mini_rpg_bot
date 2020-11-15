@@ -2,6 +2,7 @@
 
 const Entity = require('../Entity');
 const { getDefaultStats } = require('../Stats');
+const { readJsonFile } = require('../Utility');
 
 class Class extends Entity {
   constructor(
@@ -13,7 +14,7 @@ class Class extends Entity {
   ) {
     const size = race.size;
     const raceName = race.name;
-    const class_ = Entity.readJsonFile(classPath);
+    const class_ = readJsonFile(classPath);
     // TODO change class to smth else
     stats = Class.addStatRace(stats, race.getStat(modRace));
     console.log(stats);

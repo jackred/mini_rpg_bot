@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+
 function roll(i) {
   return Math.round(Math.random() * (i - 1) + 1);
 }
@@ -18,4 +20,8 @@ function isEmpty(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
-module.exports = { roll, repeatString, isEmpty };
+function readJsonFile(filepath) {
+  return JSON.parse(fs.readFileSync(filepath, 'utf8'));
+}
+
+module.exports = { roll, repeatString, isEmpty, readJsonFile };

@@ -2,7 +2,6 @@
 
 const { getDefaultStats } = require('./Stats');
 const Size = require('./Size');
-const fs = require('fs');
 
 class Entity {
   constructor(
@@ -16,6 +15,7 @@ class Entity {
     color,
     { equipements, stats = getDefaultStats() } = {}
   ) {
+    // put in function
     this.race = race;
     this.name = name;
     this.level = level;
@@ -124,10 +124,6 @@ class Entity {
 
   static getModifier(stat) {
     return Math.floor((stat - 10) / 2);
-  }
-
-  static readJsonFile(filepath) {
-    return JSON.parse(fs.readFileSync(filepath, 'utf8'));
   }
 }
 

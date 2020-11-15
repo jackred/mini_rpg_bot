@@ -1,12 +1,12 @@
 'use strict';
 
 const Entity = require('../Entity');
-const { isEmpty } = require('../Utility');
+const { isEmpty, readJsonFile } = require('../Utility');
 const gaussian = require('gaussian');
 
 class Monster extends Entity {
   constructor(monsterPath, level, name, { equipements = {}, stats = {} } = {}) {
-    const monster = Entity.readJsonFile(monsterPath);
+    const monster = readJsonFile(monsterPath);
     stats = Monster.computeStat(monster.stats, stats, level);
     super(
       level,

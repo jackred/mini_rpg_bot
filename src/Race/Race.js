@@ -1,11 +1,11 @@
 'use strict';
 
-const Entity = require('../Entity');
 const { Stats } = require('../Stats');
+const { readJsonFile } = require('../Utility');
 
 class Race {
   constructor(racePath) {
-    const race = Entity.readJsonFile(racePath);
+    const race = readJsonFile(racePath);
     this.name = race.name;
     this.size = race.size;
     this.stat = race.stat;
