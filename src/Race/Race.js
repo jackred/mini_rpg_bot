@@ -5,7 +5,7 @@ const { Stats } = require('../Stats');
 
 class Race {
   constructor(racePath) {
-    const race = Entity.readJsonFile(racePath, 'src/Race/');
+    const race = Entity.readJsonFile(racePath);
     this.name = race.name;
     this.size = race.size;
     this.stat = race.stat;

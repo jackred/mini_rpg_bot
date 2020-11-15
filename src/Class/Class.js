@@ -11,9 +11,9 @@ class Class extends Entity {
     race,
     { equipements = {}, stats = {}, modRace = {} } = {}
   ) {
-    const size = race.getSize();
-    const raceName = race.getName();
-    const class_ = Entity.readJsonFile(classPath, 'src/Class/');
+    const size = race.size;
+    const raceName = race.name;
+    const class_ = Entity.readJsonFile(classPath);
     // TODO change class to smth else
     stats = Class.addStatRace(stats, race.getStat(modRace));
     console.log(stats);

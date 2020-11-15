@@ -1,10 +1,11 @@
 'use strict';
 
 const Race = require('./Race');
+const path = require('path');
 
 class Elf extends Race {
   constructor() {
-    super('./Elf.json');
+    super(path.resolve(__dirname, './Elf.json'));
   }
 }
 
