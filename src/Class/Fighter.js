@@ -11,17 +11,11 @@ class Fighter extends Class {
     race,
     { equipements = {}, stats = {}, modRace = {} } = {}
   ) {
-    super(
-      path.resolve(__dirname, './Fighter.json'),
-      level,
-      name,
-      race,
+    super(path.resolve(__dirname, './Fighter.json'), level, name, race, {
+      equipements,
+      stats,
       modRace,
-      {
-        equipements,
-        stats,
-      }
-    );
+    });
   }
 
   baseAttack(target) {
