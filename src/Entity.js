@@ -1,7 +1,9 @@
 'use strict';
 
 const { getDefaultStats } = require('./Stats');
+const listEquipement = require('./Equipement/ListEquipement.json');
 const Size = require('./Size');
+const { isEmpty } = require('./Utility');
 
 class Entity {
   constructor(
@@ -13,7 +15,7 @@ class Entity {
     acBase,
     bba,
     color,
-    { equipements, stats = getDefaultStats() } = {}
+    { equipements = [], stats = getDefaultStats() } = {}
   ) {
     // put in function
     this.race = race;
@@ -28,13 +30,17 @@ class Entity {
     this.setUtilityInfo(color);
   }
 
+  initEquipement() {
+    this.equipements = {};
+    for (let type of listEquipement.equipementType) {
+      this.equipements[type] = {};
+    }
+  }
+
   initProperty() {
     this.attr = {};
     this.attr.ac = {};
     this.attr.hp = {};
-    this.equipements = {};
-    this.equipements.armor = {};
-    this.equipements.wearpon = {};
   }
 
   setAttributs(dv, acBase, bba) {
@@ -63,21 +69,25 @@ class Entity {
     this.attr.init = this.stats.dex.mod;
   }
 
-  setEquipement(equipements = {}) {
-    this.equipements = equipements;
+  setEquipement(equipements = []) {
+    this.initEquipement();
+    for (let e of equipements) {
+      this.equipements[e.type][e.equipementType] = e;
+    }
     this.computeBonusEquipements();
   }
 
   computeBonusEquipements() {
-    this.equipements.def = 0;
-    this.equipements.atk = 0;
-    for (let armor in this.equipements.armor) {
-      this.equipements.def += this.equipements.armor[armor].def;
-      this.equipements.atk += this.equipements.armor[armor].atk;
-    }
-    for (let weapon in this.equipements.armor) {
-      this.equipements.def += this.equipements.armor[weapon].def;
-      this.equipements.atk += this.equipements.armor[weapon].atk;
+    for (let type of listEquipement.equipementType) {
+      for (let equipement in this.equipements[type]) {
+        let tmpE = this.equipements[type][equipement];
+        for (let bonus in tmpE.bonus) {
+          if (!(bonus in this.equipements)) {
+            this.equipements[bonus] = 0;
+          }
+          this.equipements[bonus] += tmpE.bonus[bonus];
+        }
+      }
     }
   }
 
@@ -86,13 +96,31 @@ class Entity {
     this.utility.color = color;
   }
 
-  canEquip(equipement) {}
+  canEquip(userType) {
+    return listEquipement.userType[userType].includes(this.race);
+  }
+
+  hasEquipementType(type, equipementType) {
+    return equipementType in this.equipements[type];
+  }
 
   addEquipement(newE) {
-    if (this.canEquip(newE)) {
-      this.equipements[newE.type][newE.equipementType] = newE;
-      this.computeBonusEquipements();
+    let msg;
+    if (this.canEquip(newE.userType)) {
+      if (!this.hasEquipementType(newE.type, newE.equipementType)) {
+        this.equipements[newE.type][newE.equipementType] = newE;
+        this.computeBonusEquipements();
+        msg = { res: true, msg: `${newE.name} is now equipped` };
+      } else {
+        msg = {
+          res: false,
+          msg: `An equipement ${newE.equipementType} is already equipemd`,
+        };
+      }
+    } else {
+      msg = { res: false, msg: `Can't equip ${newE.userType} equipement` };
     }
+    return msg;
   }
 
   setStatBase(stats) {

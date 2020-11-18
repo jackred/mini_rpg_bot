@@ -10,7 +10,7 @@ class Class extends Entity {
     level,
     name,
     race,
-    { equipements = {}, stats = {}, modRace = {} } = {}
+    { equipements = [], stats = {}, modRace = {} } = {}
   ) {
     const size = race.size;
     const raceName = race.name;

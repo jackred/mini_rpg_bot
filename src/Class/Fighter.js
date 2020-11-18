@@ -9,7 +9,7 @@ class Fighter extends Class {
     level,
     name,
     race,
-    { equipements = {}, stats = {}, modRace = {} } = {}
+    { equipements = [], stats = {}, modRace = {} } = {}
   ) {
     super(path.resolve(__dirname, './Fighter.json'), level, name, race, {
       equipements,

@@ -1,0 +1,4 @@
+{
+  "equipementType": ["armor", "weapon"],
+  "userType": {"humanoid": ["Elf", "HalfElf", "Goblin", "Human"]}
+}
