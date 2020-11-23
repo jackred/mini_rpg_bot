@@ -1,4 +1,5 @@
 {
-  "equipementType": ["armor", "weapon"],
+  "type": ["armor", "weapon"],
+  "weaponType": ["main", "second", "ranged"],
   "userType": {"humanoid": ["Elf", "HalfElf", "Goblin", "Human"]}
 }

@@ -3,7 +3,7 @@
 const { getDefaultStats } = require('./Stats');
 const listEquipement = require('./Equipement/ListEquipement.json');
 const Size = require('./Size');
-const { isEmpty } = require('./Utility');
+const { gVor0 } = require('./Utility');
 
 class Entity {
   constructor(
@@ -23,8 +23,8 @@ class Entity {
     this.level = level;
     this.size = { size, ...Size[size] };
     this.initProperty(bba);
-    this.setStatBase(stats);
     this.setEquipement(equipements);
+    this.setStatsBase(stats);
     this.setAttributs(dv, acBase, bba);
     this.computeAttributs();
     this.setUtilityInfo(color);
@@ -32,7 +32,7 @@ class Entity {
 
   initEquipement() {
     this.equipements = {};
-    for (let type of listEquipement.equipementType) {
+    for (let type of listEquipement.type) {
       this.equipements[type] = {};
     }
   }
@@ -50,23 +50,23 @@ class Entity {
   }
 
   computeAttributs() {
-    this.attr.bba = this.attr.bba_f(this.level);
+    this.attr.bba = this.attr.bba_f(this.level) + gVor0(this.equipements.bba);
     const tmp = this.attr.dv + this.stats.con.mod;
     this.attr.hp = {
-      max: tmp * this.level,
+      max: tmp * this.level + gVor0(this.equipements.hp),
       actual:
         this.attr.hp.actual !== undefined
           ? this.hp.actual + tmp
           : tmp * this.level,
     };
     this.attr.ac.total =
-      this.equipements.def +
+      gVor0(this.equipements.def) +
       this.attr.ac.base +
       this.stats.dex.mod +
       this.size.mod;
     this.attr.cac = this.attr.bba + this.stats.str.mod + this.size.mod;
     this.attr.dist = this.attr.bba + this.stats.dex.mod + this.size.mod;
-    this.attr.init = this.stats.dex.mod;
+    this.attr.init = this.stats.dex.mod + gVor0(this.equipements.init);
   }
 
   setEquipement(equipements = []) {
@@ -78,7 +78,7 @@ class Entity {
   }
 
   computeBonusEquipements() {
-    for (let type of listEquipement.equipementType) {
+    for (let type of listEquipement.type) {
       for (let equipement in this.equipements[type]) {
         let tmpE = this.equipements[type][equipement];
         for (let bonus in tmpE.bonus) {
@@ -123,18 +123,61 @@ class Entity {
     return msg;
   }
 
-  setStatBase(stats) {
+  computeStats() {
     this.stats = {};
-    let defaultStats = getDefaultStats();
+    const defaultStats = getDefaultStats();
+    for (let stat in defaultStats) {
+      const tmpStats =
+        this.baseStats[stat].value +
+        this.tmpStats[stat].value +
+        gVor0(this.equipements[stat]);
+      this.stats[stat] = {
+        value: tmpStats,
+        mod: Entity.getModifier(tmpStats),
+      };
+    }
+  }
+
+  // format changes > {stat: value}
+  // ex: {str: -2}
+  // ex: {dex: 1}
+  // changeStatsBase: ex use, level up
+  changeStatsBase(changes) {
+    for (let stat in changes) {
+      const tmpStats = this.baseStats[stat].value + changes[stat];
+      this.baseStats[stat] = {
+        value: tmpStats,
+        mod: Entity.getModifier(tmpStats),
+      };
+    }
+    this.computeStats();
+  }
+  // changeStat: ex use, get bonus from spell
+  changeStats(changes) {
+    for (let stat in changes) {
+      const tmpStats = this.tmpStats[stat].value + changes[stat];
+      this.tmpStats[stat] = {
+        value: tmpStats,
+      };
+    }
+    this.computeStats();
+  }
+
+  setStatsBase(stats) {
+    this.baseStats = {};
+    this.tmpStats = {};
+    const defaultStats = getDefaultStats();
     for (let stat in defaultStats) {
       if (!(stat in stats)) {
         stats[stat] = defaultStats[stat];
       }
-      this.stats[stat] = {
+      this.tmpStats[stat] = { value: 0 };
+      this.baseStats[stat] = {
         value: stats[stat],
         mod: Entity.getModifier(stats[stat]),
       };
     }
+    this.computeStats();
   }
 
   isHit(atk) {

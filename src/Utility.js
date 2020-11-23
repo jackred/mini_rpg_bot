@@ -24,4 +24,15 @@ function readJsonFile(filepath) {
   return JSON.parse(fs.readFileSync(filepath, 'utf8'));
 }
 
-module.exports = { roll, repeatString, isEmpty, readJsonFile };
+function getValueOrDefault(def, value = def) {
+  return value;
+}
+// aliasing for easier writting
+function gVorD(...args) {
+  return getValueOrDefault(...args);
+}
+
+function gVor0(value) {
+  return getValueOrDefault(0, value);
+}
+module.exports = { roll, repeatString, isEmpty, readJsonFile, gVorD, gVor0 };
